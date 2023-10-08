@@ -1,7 +1,82 @@
 window.addEventListener("load", func);
-    
+
+var graphData = [];
+    function parseData(){
+        
+        var data= [
+            {
+              "id": 1,
+              "serviceName": "Service-1",
+              "dependentServices": [
+                {
+                  "id": 2,
+                  "serviceName": "Service-2",
+                  "dependentServices": null
+                },{
+                    "id": 3,
+                    "serviceName": "Service-3",
+                    "dependentServices": null 
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "serviceName": "Service-2",
+              "dependentServices": [
+                {
+                  "id": 4,
+                  "serviceName": "Service-3",
+                  "dependentServices": null
+                },
+                {
+                    "id": 6,
+                    "serviceName": "Service-4",
+                    "dependentServices": null
+                  }
+              ]
+            },
+            {
+              "id": 4,
+              "serviceName": "Service-3",
+              "dependentServices":  null /*[
+                {
+                  "id": 6,
+                  "serviceName": "Service-4",
+                  "dependentServices": null
+                }
+              ]*/
+            }
+        ]
+        $.each(data, function(i, item) {
+            var flowData = [];
+          //  console.log("dependentService=="+item.dependentServices.length);
+            console.log(item.serviceName);
+            
+           /* $.each(item.dependentServices, function(j, item1) {
+                console.log(item1.serviceName);
+                flowData.push(item1.serviceName);
+            });*/
+
+            if(item.dependentServices!=null){
+            for (let i = 0; i < item.dependentServices.length; i++) {
+                console.log(item.dependentServices[i].serviceName);
+                flowData.push(item.serviceName);
+                flowData.push(item.dependentServices[i].serviceName);
+                graphData.push(flowData);
+                flowData=[];
+            
+              }
+            }
+            
+            
+        });
+        
+    }
+
     function func(){
+
         console.log("LOADED");
+        parseData();
         
         var a = new flowjs.DiGraph();
         a.addPaths([
@@ -18,29 +93,43 @@ window.addEventListener("load", func);
         ]);
         
         var c = new flowjs.DiGraph();
-        c.addPaths([
+        c.addPaths(graphData);
+        /*c.addPaths([
             ["AA", "BB"],
             ["BB", "EE"],
             ["BB", "FF"],
             ["AA", "CC", "DD"]
         ]);
-        
+        c.addPaths([
+            [""]
+        ]);*/
+    
         var d = new flowjs.DiGraph();
-        d.addPaths([
-            ["Peter Q", "Gamora", "Nova Prime", "Rocket"],
-            ["Drax", "Groot", "Rocket"],
-            ["Merdith Q", "Groot"]
+       d.addPaths([
+            ["Service-1", "Service-2", "Service-3", "Service-4"],
+            ["Service-5", "Service-6", "Service-4"],
+            ["Service-7", "Service-6"]
         ]);
-        
-        new flowjs.DiFlowChart("canvas1", a).draw();
-        new flowjs.DiFlowChart("canvas2", b).draw();
+        /*d.addPaths([
+            ["", ""]
+        ]);*/
+        console.log("c");
+        console.log(c);
+
+       // d.addPaths(graphData);
+        console.log("d")
+        //document.getElementById("")
+        console.log(d._nodes);
+
+        /*new flowjs.DiFlowChart("canvas1", a).draw();
+        new flowjs.DiFlowChart("canvas2", b).draw();*/
         new flowjs.DiFlowChart("canvas4", d).draw();
         
         
         // Advanced Example with loading animation
-        var cf = new flowjs.DiFlowChart("canvas3", c);
-        cf.draw();
-        simuLoad(cf, c);    
+         //var cf = new flowjs.DiFlowChart("canvas3", c);
+         //cf.draw();
+         //simuLoad(cf, c);    
     }
     
     
